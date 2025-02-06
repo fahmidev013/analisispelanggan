@@ -1,0 +1,12 @@
+pandas 
+numpy 
+scikit-learn 
+flask 
+streamlit 
+matplotlib 
+seaborn 
+requests
+reportlab
+plotly
+xgboost
+textblob
