@@ -10,3 +10,4 @@ reportlab
 plotly
 xgboost
 textblob
+gunicorn 
