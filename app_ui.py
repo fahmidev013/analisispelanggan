@@ -10,12 +10,12 @@ st.title("Customer Analytics & Segmentation")
 # Load dataset
 @st.cache_data
 def load_data():
-    response = requests.get("http://127.0.0.1:5000/customers")
+    response = requests.get("https://analisispelanggan-production.up.railway.app/customers")
     return pd.DataFrame(response.json())
 
 @st.cache_data
 def load_reviews():
-    response = requests.get("http://127.0.0.1:5000/reviews")
+    response = requests.get("https://analisispelanggan-production.up.railway.app/reviews")
     return pd.DataFrame(response.json())
 
 reviews = load_reviews()
@@ -50,7 +50,7 @@ st.plotly_chart(fig)
 # **📩 Download Laporan PDF**
 st.subheader("📜 Laporan Analisis Pelanggan")
 if st.button("Download Laporan PDF"):
-    pdf_url = "http://127.0.0.1:5000/report"
+    pdf_url = "https://analisispelanggan-production.up.railway.app/report"
     st.markdown(f"[Klik di sini untuk mendownload laporan]({pdf_url})")
 
 # **🔮 Prediksi Cluster untuk Pelanggan Baru**
@@ -61,7 +61,7 @@ income = st.number_input("Masukkan Pendapatan Tahunan", min_value=10000, max_val
 spending = st.number_input("Masukkan Spending Score", min_value=0, max_value=100, step=1, key="3")
 
 if st.button("Prediksi Cluster", key="btn_cluster"):
-    response = requests.post("http://127.0.0.1:5000/predict", json={"Age": age, "Income": income, "SpendingScore": spending})
+    response = requests.post("https://analisispelanggan-production.up.railway.app/predict", json={"Age": age, "Income": income, "SpendingScore": spending})
     
     if response.status_code == 200:
         result = response.json()
@@ -77,7 +77,7 @@ income_churn = st.number_input("Masukkan Pendapatan Tahunan", min_value=10000, m
 spending_churn = st.number_input("Masukkan Spending Score", min_value=0, max_value=100, step=1, key="6")
 
 if st.button("Prediksi Churn", key="btn_churn"):
-    response = requests.post("http://127.0.0.1:5000/predict_churn", json={"Age": age_churn, "Income": income_churn, "SpendingScore": spending_churn})
+    response = requests.post("https://analisispelanggan-production.up.railway.app/predict_churn", json={"Age": age_churn, "Income": income_churn, "SpendingScore": spending_churn})
     
     if response.status_code == 200:
         result = response.json()
@@ -99,7 +99,7 @@ st.subheader("🔍 Cek Sentimen Ulasan")
 review_text = st.text_area("Masukkan Ulasan Pelanggan", key="7")
 
 if st.button("Analisis Sentimen", key="8"):
-    response = requests.post("http://127.0.0.1:5000/analyze_review", json={"Review": review_text})
+    response = requests.post("https://analisispelanggan-production.up.railway.app/analyze_review", json={"Review": review_text})
     
     if response.status_code == 200:
         result = response.json()
@@ -120,7 +120,7 @@ st.subheader("🛍 Rekomendasi Produk")
 customer_name = st.text_input("Masukkan Nama Pelanggan", key="9")
 
 if st.button("Dapatkan Rekomendasi", key="10"):
-    response = requests.post("http://127.0.0.1:5000/recommend", json={"Name": customer_name})
+    response = requests.post("https://analisispelanggan-production.up.railway.app/recommend", json={"Name": customer_name})
     
     if response.status_code == 200:
         result = response.json()
