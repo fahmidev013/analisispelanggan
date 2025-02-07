@@ -10,4 +10,5 @@ reportlab
 plotly
 xgboost
 textblob
-gunicorn 
+gunicorn
+python-dotenv 
