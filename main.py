@@ -206,8 +206,8 @@ def chat():
 
 #  INFORMATION XTRACTOR
 # Load model NER dari Hugging Face
-nlp = pipeline("ner", model="dbmdz/bert-base-cased-finetuned-conll03-english")
-# nlp = pipeline("ner", model="dslim/distilbert-NER")
+# nlp = pipeline("ner", model="dbmdz/bert-base-cased-finetuned-conll03-english")
+nlp = pipeline("ner", model="dslim/distilbert-NER")
 # nlp = pipeline("ner", model="dbmdz/bert-large-cased-finetuned-conll03-english")
 
 # Ekstraksi teks dari PDF
