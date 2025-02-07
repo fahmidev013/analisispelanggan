@@ -15,3 +15,7 @@ python-dotenv
 langchain
 langchain_community
 openai
+flask-cors 
+transformers 
+pdfplumber 
+torch  

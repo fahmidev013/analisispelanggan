@@ -8,14 +8,21 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from textblob import TextBlob
 from sklearn.metrics.pairwise import cosine_similarity  
+from langchain.llms import OpenAI
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory
 import os
 from dotenv import load_dotenv
+from flask_cors import CORS
+import pdfplumber
+from transformers import pipeline
 
 load_dotenv()
 
 OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
+CORS(app) # Untuk mengizinkan komunikasi dengan frontend
 
 # Load dataset
 data = pd.read_csv("customer_data.csv")
@@ -179,9 +186,7 @@ def get_recommendations():
 
 # CHATBOT
 
-from langchain.llms import OpenAI
-from langchain.chains import ConversationChain
-from langchain.memory import ConversationBufferMemory
+
 
 # Inisialisasi Chatbot dengan LangChain
 llm = OpenAI()
@@ -197,6 +202,54 @@ def chat():
     
     response = conversation.predict(input=user_input)
     return jsonify({"response": response})
+
+
+#  INFORMATION XTRACTOR
+# Load model NER dari Hugging Face
+nlp = pipeline("ner", model="dslim/distilbert-NER")
+# nlp = pipeline("ner", model="dbmdz/bert-large-cased-finetuned-conll03-english")
+
+# Ekstraksi teks dari PDF
+def extract_text_from_pdf(pdf_path):
+    text = ""
+    with pdfplumber.open(pdf_path) as pdf:
+        for page in pdf.pages:
+            text += page.extract_text() + "\n"
+    return text
+
+# Kategorisasi entitas
+def categorize_entities(entities):
+    categorized = {"PERSON": [], "ORG": [], "LOC": [], "CONTACT": []}
+    for entity in entities:
+        label = entity['entity']
+        if label == "B-PER" or label == "I-PER":
+            categorized["PERSON"].append(entity['word'])
+        elif label == "B-ORG" or label == "I-ORG":
+            categorized["ORG"].append(entity['word'])
+        elif label == "B-LOC" or label == "I-LOC":
+            categorized["LOC"].append(entity['word'])
+        # Identifikasi kontak dari teks secara manual
+        if "@" in entity['word'] or "+" in entity['word']:
+            categorized["CONTACT"].append(entity['word'])
+    return categorized
+
+@app.route("/extract", methods=["POST"])
+def extract_information():
+    if "file" not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
+
+    file = request.files["file"]
+    file_path = "temp.pdf"
+    file.save(file_path)
+
+    # Ekstraksi teks
+    text = extract_text_from_pdf(file_path)
+    
+    # Ekstraksi entitas menggunakan model NLP
+    entities = nlp(text)
+    categorized_entities = categorize_entities(entities)
+    print(categorized_entities)
+    return jsonify({"text": text, "entities": categorized_entities})
 
 
 if __name__ == '__main__':
