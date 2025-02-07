@@ -22,7 +22,7 @@ load_dotenv()
 OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
-CORS(app) # Untuk mengizinkan komunikasi dengan frontend
+# CORS(app) # Untuk mengizinkan komunikasi dengan frontend
 
 # Load dataset
 data = pd.read_csv("customer_data.csv")
