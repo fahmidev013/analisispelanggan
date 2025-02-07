@@ -12,3 +12,6 @@ xgboost
 textblob
 gunicorn
 python-dotenv 
+langchain
+langchain_community
+openai

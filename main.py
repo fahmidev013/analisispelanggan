@@ -8,9 +8,12 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from textblob import TextBlob
 from sklearn.metrics.pairwise import cosine_similarity  
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-
+OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
@@ -173,6 +176,28 @@ def get_recommendations():
         return jsonify({"Name": customer_name, "Recommendations": str(recommendations)})
     except Exception as e:
         return jsonify({"error": str(e)})
+
+# CHATBOT
+
+from langchain.llms import OpenAI
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory
+
+# Inisialisasi Chatbot dengan LangChain
+llm = OpenAI()
+conversation = ConversationChain(llm=llm, memory=ConversationBufferMemory())
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    data = request.json
+    user_input = data.get("message", "")
+    
+    if not user_input:
+        return jsonify({"error": "No input provided"}), 400
+    
+    response = conversation.predict(input=user_input)
+    return jsonify({"response": response})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
