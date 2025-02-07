@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Blueprint, Flask, request, jsonify, send_file
 import pandas as pd
 import numpy as np
 import xgboost as xgb
@@ -7,7 +7,9 @@ from sklearn.preprocessing import StandardScaler
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from textblob import TextBlob
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics.pairwise import cosine_similarity  
+main_blueprint = Blueprint('main', __name__) 
+from . import views, errors 
 
 
 
