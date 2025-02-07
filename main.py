@@ -7,8 +7,9 @@ from sklearn.preprocessing import StandardScaler
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from textblob import TextBlob
-from sklearn.metrics.pairwise import cosine_similarity  
-from langchain.llms import OpenAI
+from sklearn.metrics.pairwise import cosine_similarity
+from langchain_community.llms import OpenAI  
+# from langchain.llms import OpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 import os
@@ -22,7 +23,7 @@ load_dotenv()
 OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
-# CORS(app) # Untuk mengizinkan komunikasi dengan frontend
+CORS(app) # Untuk mengizinkan komunikasi dengan frontend
 
 # Load dataset
 data = pd.read_csv("customer_data.csv")
