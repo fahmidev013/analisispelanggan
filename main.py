@@ -190,19 +190,19 @@ def get_recommendations():
 
 
 # Inisialisasi Chatbot dengan LangChain
-llm = OpenAI()
-conversation = ConversationChain(llm=llm, memory=ConversationBufferMemory())
+# llm = OpenAI()
+# conversation = ConversationChain(llm=llm, memory=ConversationBufferMemory())
 
-@app.route("/chat", methods=["POST"])
-def chat():
-    data = request.json
-    user_input = data.get("message", "")
+# @app.route("/chat", methods=["POST"])
+# def chat():
+#     data = request.json
+#     user_input = data.get("message", "")
     
-    if not user_input:
-        return jsonify({"error": "No input provided"}), 400
+#     if not user_input:
+#         return jsonify({"error": "No input provided"}), 400
     
-    response = conversation.predict(input=user_input)
-    return jsonify({"response": response})
+#     response = conversation.predict(input=user_input)
+#     return jsonify({"response": response})
 
 
 #  INFORMATION XTRACTOR
