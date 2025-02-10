@@ -31,10 +31,9 @@ data = load_data()
 
 # Fungsi untuk menampilkan halaman
 def dataSciencePage():
-    st.title("Customer Analytics & Segmentation")
-    st.write("Gunakan sidebar untuk navigasi.")
+    st.title("Data Sains")
+    st.subheader("Analisa Sentimen, Segmentasi Pelanggan, dan Rekomendasi Produk menggunakan Machine Learning.")
 
-    st.dataframe(reviews)
     # **📌 Statistik Umum**
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     col1.metric("Rata-rata Usia", f"{data['Age'].mean():.1f}")
@@ -100,8 +99,8 @@ def dataSciencePage():
             st.error("Gagal mendapatkan prediksi.")
 
     # **📌 Tampilkan Ulasan Pelanggan**
-    st.subheader("📢 Ulasan Pelanggan & Sentimen")
-
+    st.title("Ulasan Pelanggan & Analisis Sentimen")
+    st.dataframe(reviews)
     # **🔍 Analisis Sentimen untuk Review Baru**
     st.subheader("🔍 Cek Sentimen Ulasan")
 
