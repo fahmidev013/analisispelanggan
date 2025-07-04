@@ -13,7 +13,7 @@ class Company(Base):
     rating = Column(Text)
     user_ratings_count = Column(Integer)
     reviews = Column(Text)
-    types = Column(Text),
+    types = Column(Text)
     profile_info = Column(Text)
 
 def get_engine_and_session(db_url):
