@@ -19,3 +19,12 @@ flask-cors
 transformers 
 pdfplumber 
 torch  
+
+folium 
+streamlit-folium
+sqlalchemy 
+pymysql
+bs4
+debugpy 
+streamlit-geolocation
+selenium

@@ -18,9 +18,15 @@ from flask_cors import CORS
 import pdfplumber
 from transformers import pipeline
 
+import requests
+from api.scraper import scrape_data
+from api.models import Company, get_engine_and_session
+from sqlalchemy import func, desc
+
 load_dotenv()
 
 OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 app = Flask(__name__)
 CORS(app) # Untuk mengizinkan komunikasi dengan frontend
@@ -252,6 +258,90 @@ def extract_information():
     categorized_entities = categorize_entities(entities)
     print(categorized_entities)
     return jsonify({"text": text, "entities": categorized_entities})
+
+# Ambil DB dari .env atau default ke SQLite
+DB_URL = os.getenv("DB_URL", "sqlite:///data/companies.db")
+engine, db_session = get_engine_and_session(DB_URL)
+print(DB_URL)
+
+@app.route('/api/search', methods=['GET'])
+def search_nearby_places():
+    lat = request.args.get('lat', '6.874138255514192')  # format: "lat,lng"
+    lng = request.args.get('lng', '107.50300964106383')  # format: "lat,lng"
+    radius = request.args.get('radius', 5000)  # dalam meter
+    keyword = request.args.get('keyword', 'perusahaan')
+    url = "https://places.googleapis.com/v1/places:searchText"
+    headers = {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": GOOGLE_API_KEY,
+        "X-Goog-FieldMask": "places.displayName.text,places.formattedAddress,places.types,places.internationalPhoneNumber,places.rating,places.userRatingCount,places.websiteUri,places.reviews.originalText.text,places.postalAddress.locality"
+        # "X-Goog-FieldMask": "*"
+    }
+    body = {
+        "textQuery": keyword,
+        "languageCode": "id",
+        "regionCode": "id",
+        "maxResultCount": 6,
+        "locationBias": {
+            "circle": {
+                "center": {
+                    "latitude": float(lat),
+                    "longitude": float(lng)
+                },
+                "radius": float(radius)
+            }
+        },
+        # "query": keyword
+    }
+    
+    response = requests.post(url, headers=headers, json=body)
+    data = response.json()
+    results = []
+    for place in data.get("places", []):
+        name = place.get("displayName").get("text")
+        address = place.get("formattedAddress")
+        phone = place.get("internationalPhoneNumber")
+        web = place.get("websiteUri")
+        rating = place.get("rating")
+        userRatingCount = place.get("userRatingCount")
+        reviews = []
+        if place.get("reviews"):
+            for feedback in place.get("reviews"):
+                reviews.append(feedback.get("originalText", {}).get("text"))
+        types = place.get("types")
+        locality = place.get("postalAddress", {}).get("locality")
+        profile_info = scrape_data(name)
+
+        results.append({
+            "name": name,
+            "address": address,
+            "phone": phone,
+            "web": web,
+            "rating": rating,
+            "userRatingCount": userRatingCount,
+            "reviews": reviews,
+            "types": types,
+            "locality": locality,
+            "profile_info": profile_info
+        })
+        
+        company = Company(
+            name=name,
+            address=address,
+            phone=phone,
+            web=str(web) if web is not None else '',
+            rating=rating,
+            user_ratings_count=userRatingCount,
+            reviews=", ".join(str(x) if x is not None else '' for x in reviews),
+            types=", ".join(str(x) if x is not None else '' for x in types),
+            profile_info=", ".join(str(x) if x is not None else '' for x in profile_info)
+        )
+        
+        db_session.add(company)
+    db_session.commit()
+        
+        
+    return jsonify(results)
 
 
 if __name__ == '__main__':
