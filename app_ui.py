@@ -231,7 +231,6 @@ def webScrappingPage():
         submitted = st.form_submit_button("🔍 Cari Perusahaan Sekitar")
         
     # url = f"http://localhost:5000/api/search_with_scrape?location={f"{lat},{lng}"}&radius={radius}"
-    API_URL = f"http://localhost:5000/api/search"
     if submitted:
         with st.spinner("🔄 Mencari perusahaan..."):
             params = {
@@ -242,7 +241,7 @@ def webScrappingPage():
             }
 
             try:
-                res = requests.get(API_URL, params=params)
+                res = requests.get(f"{BASE_URL}/api/search", params=params)
                 res.raise_for_status()
                 data = res.json()
 
