@@ -58,7 +58,7 @@ data["Churn"] = (data["SpendingScore"] < 30).astype(int)
 # Model Prediksi Churn
 X = data[["Age", "Income", "SpendingScore", "LoyaltyScore", "CLV"]]
 y = data["Churn"]
-churn_model = xgb.XGBClassifier()
+churn_model = xgb.XGBClassifier(objective="binary:logistic", base_score=0.5)
 churn_model.fit(X, y)
 
 @app.route('/customers', methods=['GET'])
