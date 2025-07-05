@@ -1,6 +1,6 @@
 Name,Age,Income,SpendingScore,LoyaltyScore,CLV,Churn,Review,Laptop,Smartphone,Tablet,Headphone,Smartwatch,Kamera,Speaker,Mouse,Keyboard
-Alice,25,45000,85,67.5,3825,0,"Very good services!",1,1,0,0,1,0,1,0,1
+Alice,25,45000,85,67.5,3825,0.5,"Very good services!",1,1,0,0,1,0,1,0,1
 Bob,32,60000,40,30.0,2400,1,"I'm very unhappy about this product.",0,1,1,1,0,0,0,1,0
-Charlie,45,85000,65,47.5,5525,0,"Shipping is fast dan safe.",1,0,1,1,0,1,0,1,0
+Charlie,45,85000,65,47.5,5525,0.5,"Shipping is fast dan safe.",1,0,1,1,0,1,0,1,0
 David,29,50000,30,25.0,1500,1,"I'm unsatisfied with the product.",0,1,0,1,1,1,1,0,1
-Eve,38,75000,75,56.25,5625,0,"Quality is excellent, good job!",1,0,0,0,1,1,1,0,1
+Eve,38,75000,75,56.25,5625,0.5,"Quality is excellent, good job!",1,0,0,0,1,1,1,0,1
