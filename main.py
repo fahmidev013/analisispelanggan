@@ -294,8 +294,11 @@ def search_nearby_places():
         # "query": keyword
     }
     
-    response = requests.post(url, headers=headers, json=body)
-    data = response.json()
+    try:
+        response = requests.post(url, headers=headers, json=body)
+        data = response.json()
+    except Exception as e:
+        print(f"KEsalahan terjadi adalah : {e}")
     results = []
     for place in data.get("places", []):
         name = place.get("displayName").get("text")
