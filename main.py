@@ -260,8 +260,8 @@ def extract_information():
     return jsonify({"text": text, "entities": categorized_entities})
 
 # Ambil DB dari .env atau default ke SQLite
-# DB_URL = os.getenv("DB_URL", "sqlite:///data/companies.db")
-# engine, db_session = get_engine_and_session(DB_URL)
+DB_URL = os.getenv("DB_URL", "sqlite:///data/companies.db")
+engine, db_session = get_engine_and_session(DB_URL)
 
 @app.route('/api/search', methods=['GET'])
 def search_nearby_places():
