@@ -312,7 +312,7 @@ def search_nearby_places():
                 reviews.append(feedback.get("originalText", {}).get("text"))
         types = place.get("types")
         locality = place.get("postalAddress", {}).get("locality")
-        profile_info = [] # scrape_data(name)
+        profile_info = scrape_data(name)
 
         results.append({
             "name": name,
