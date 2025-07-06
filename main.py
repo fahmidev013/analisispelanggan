@@ -312,7 +312,7 @@ def search_nearby_places():
                 reviews.append(feedback.get("originalText", {}).get("text"))
         types = place.get("types")
         locality = place.get("postalAddress", {}).get("locality")
-        profile_info = scrape_data(name)
+        profile_info = [] # scrape_data(name)
 
         results.append({
             "name": name,
@@ -327,20 +327,20 @@ def search_nearby_places():
             "profile_info": profile_info
         })
         
-    #     company = Company(
-    #         name=name,
-    #         address=address,
-    #         phone=phone,
-    #         web=str(web) if web is not None else '',
-    #         rating=rating,
-    #         user_ratings_count=userRatingCount,
-    #         reviews=", ".join(str(x) if x is not None else '' for x in reviews),
-    #         types=", ".join(str(x) if x is not None else '' for x in types),
-    #         profile_info=", ".join(str(x) if x is not None else '' for x in profile_info)
-    #     )
+        company = Company(
+            name=name,
+            address=address,
+            phone=phone,
+            web=str(web) if web is not None else '',
+            rating=rating,
+            user_ratings_count=userRatingCount,
+            reviews=", ".join(str(x) if x is not None else '' for x in reviews),
+            types=", ".join(str(x) if x is not None else '' for x in types),
+            profile_info=", ".join(str(x) if x is not None else '' for x in profile_info)
+        )
         
-    #     db_session.add(company)
-    # db_session.commit()
+        db_session.add(company)
+    db_session.commit()
         
         
     return jsonify(results)
