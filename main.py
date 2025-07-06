@@ -260,9 +260,8 @@ def extract_information():
     return jsonify({"text": text, "entities": categorized_entities})
 
 # Ambil DB dari .env atau default ke SQLite
-DB_URL = os.getenv("DB_URL", "sqlite:///data/companies.db")
-engine, db_session = get_engine_and_session(DB_URL)
-print(DB_URL)
+# DB_URL = os.getenv("DB_URL", "sqlite:///data/companies.db")
+# engine, db_session = get_engine_and_session(DB_URL)
 
 @app.route('/api/search', methods=['GET'])
 def search_nearby_places():
@@ -328,20 +327,20 @@ def search_nearby_places():
             "profile_info": profile_info
         })
         
-        company = Company(
-            name=name,
-            address=address,
-            phone=phone,
-            web=str(web) if web is not None else '',
-            rating=rating,
-            user_ratings_count=userRatingCount,
-            reviews=", ".join(str(x) if x is not None else '' for x in reviews),
-            types=", ".join(str(x) if x is not None else '' for x in types),
-            profile_info=", ".join(str(x) if x is not None else '' for x in profile_info)
-        )
+    #     company = Company(
+    #         name=name,
+    #         address=address,
+    #         phone=phone,
+    #         web=str(web) if web is not None else '',
+    #         rating=rating,
+    #         user_ratings_count=userRatingCount,
+    #         reviews=", ".join(str(x) if x is not None else '' for x in reviews),
+    #         types=", ".join(str(x) if x is not None else '' for x in types),
+    #         profile_info=", ".join(str(x) if x is not None else '' for x in profile_info)
+    #     )
         
-        db_session.add(company)
-    db_session.commit()
+    #     db_session.add(company)
+    # db_session.commit()
         
         
     return jsonify(results)
