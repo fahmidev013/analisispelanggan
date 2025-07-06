@@ -13,7 +13,7 @@ def scrape_data(company="ultrajaya"):
     driver.get(f"https://search.katadata.co.id/search?q={company}&source=databoks")
 
     # Tunggu konten termuat (delay JS)
-    time.sleep(4)  # Bisa diganti dengan WebDriverWait
+    time.sleep(2)  # Bisa diganti dengan WebDriverWait
     
     
     # Ambil konten HTML setelah JS selesai render
