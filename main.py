@@ -83,6 +83,7 @@ def predict_churn():
         print('Res Error')
         return jsonify({"error": str(e)})
 
+# Endpoiunt untuk Prediksi Cluster
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
@@ -99,7 +100,7 @@ def predict():
     except Exception as e:
         return jsonify({"error": str(e)})
 
-
+# Download LAPORAN ANALISA PELANGGAN
 @app.route('/report', methods=['GET'])
 def generate_report():
     pdf_filename = "customer_report.pdf"
@@ -118,6 +119,7 @@ def generate_report():
     c.save()
     return send_file(pdf_filename, as_attachment=True)
 
+# Endpoint untuk mengukur tingkat resiko pelanggan
 @app.route('/report_churn', methods=['GET'])
 def generate_report_churn():
     pdf_filename = "customer_report_churn.pdf"
@@ -147,6 +149,8 @@ data["Sentiment"] = data["Review"].apply(analyze_sentiment)
 def get_reviews():
     return jsonify(data[["Name", "Review", "Sentiment"]].to_dict(orient="records"))
 
+
+# Enpoint untuk Sentimen Ulasan
 @app.route('/analyze_review', methods=['POST'])
 def analyze_review():
     try:
@@ -180,13 +184,14 @@ def recommend_products(customer_name):
     
     return recommended_products
 
+#Endpoint untuk Sistem Rekomendasi
 @app.route('/recommend', methods=['POST'])
 def get_recommendations():
     try:
         request_data = request.get_json()
         customer_name = request_data["Name"]
         recommendations = recommend_products(customer_name)
-        
+        print(recommendations)
         return jsonify({"Name": customer_name, "Recommendations": str(recommendations)})
     except Exception as e:
         return jsonify({"error": str(e)})
